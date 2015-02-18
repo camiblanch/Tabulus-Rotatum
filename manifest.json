@@ -2,15 +2,15 @@
    "manifest_version": 2,
    "background": { "page": "bg.html" },
    "browser_action": {
-      "default_icon": "vertical_64.png",
-      "default_title": "Dashboards - Rotate through list of URLs by loading new tabs and closing the previous."
+      "default_icon": "Magic-Wand-32.png",
+      "default_title": "Tabulus Rotatum - Rotate through list of URLs by loading new tabs and closing the previous."
    },
-   "description": "Automatically rotate through list of urls. By Cami Greenall",
+   "description": "Automatically rotate through list of urls with correlating time intervals. Ideal for dashboards and kiosks. By Cami Greenall",
    "icons": {
-      "128": "vertical_128.png",
-      "48": "vertical_32.png"
+      "128": "Magic-Wand-128.png",
+      "48": "Magic-Wand-48.png"
    },
-   "name": "Dashboards",
+   "name": "Tabulus Rotatum",
    "options_page": "options.html",
    "permissions": [ "tabs", "idle" ],
    "version": "1.0"
