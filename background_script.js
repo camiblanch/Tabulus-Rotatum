@@ -78,31 +78,40 @@ function badgeTabs(windowId, text) {
 
 // Start on a specific window
 function go(windowId) {
-	chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-		clearInterval(moverInterval);
-		console.log("Listener triggered");
-		if(tab.status == 'complete') {
-			console.log("Tab loaded");
-			newTabId = tab;
-			var intervalIndex = urlsIndex - 2;
-			if(intervalIndex < 0) {
-				intervalIndex = urls.length + intervalIndex;
+	if(urls.length > 0) {
+		chrome.tabs.query({
+			'active': false,
+			'windowId': currWindowId
+		}, function(currTabs) {
+			for(i = 0; i < currTabs.length; i++) {
+				chrome.tabs.remove(currTabs[i].id);
 			}
-			var delay = urlsIntervals[intervalIndex] * 1000;
-			console.log("This tab will be shown for " + urlsIntervals[intervalIndex] + " seconds.");
-			moverInterval = setInterval(function() { moveTab2() }, delay);
+		});
+		chrome.tabs.onUpdated.addListener(startTimer);
+		activeWindows.push(windowId);
+		badgeTabs(windowId, 'on');
+		moveTab();
+	}
+}
+
+function startTimer(tabId, changeInfo, tab) {
+	clearInterval(moverInterval);
+	if(tab.status == 'complete') {
+		newTabId = tab;
+		var intervalIndex = urlsIndex - 2;
+		if(intervalIndex < 0) {
+			intervalIndex = urls.length + intervalIndex;
 		}
-	});
-	activeWindows.push(windowId);
-	badgeTabs(windowId, 'on');
-	moveTab();
+		var delay = urlsIntervals[intervalIndex] * 1000;
+		moverInterval = setInterval(function() { moveTab2() }, delay);
+	}
 }
 
 // Stop on a specific window
 function stop(windowId) {
 	clearInterval(moverInterval);
     console.log('Stopped.');
-    chrome.tabs.onUpdated.removeListener();
+    chrome.tabs.onUpdated.removeListener(startTimer);
 	var index = activeWindows.indexOf(windowId);
 	if(index >= 0) {
 		activeWindows.splice(index);
@@ -112,7 +121,6 @@ function stop(windowId) {
 
 // Switches to next URL in list, loops.
 function moveTab() {
-	console.log("In moveTab() function");
 	badgeTabs(currWindowId, 'on');
 	chrome.tabs.create({
 		url: urls[urlsIndex], 
@@ -127,7 +135,6 @@ function moveTab() {
 
 // Deletes the current tab.
 function moveTab2() {
-	console.log("In moveTab2() function");
 	chrome.tabs.query( {
 		windowId: currWindowId
 	}, function(tabs2) {
@@ -139,7 +146,7 @@ function moveTab2() {
 if(tabAutostart) {
 	chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT},
 		function(tabs){
-			//Start Revolver Tabs in main window.
+			//Start in main window.
 			go(tabs[0].windowId);
 		}
 	);
