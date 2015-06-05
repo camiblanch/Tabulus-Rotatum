@@ -34,11 +34,7 @@ function save_options() {
 // Restores saved values from localStorage.
 function restore_options() {
   if (localStorage.autostart) {
-    if (localStorage.autostart == 'true') {
-      document.getElementById("autostart").checked = true;
-    } else {
-      document.getElementById("autostart").checked = false;
-    }
+    document.getElementById("autostart").checked = (localStorage.autostart == 'true');
   } else {
     document.getElementById("autostart").checked = false;
   }

@@ -8,11 +8,7 @@ var moverInterval;
 
 var tabAutostart = false;
 if (localStorage.autostart) {
-  if (localStorage.autostart == 'true') {
-    tabAutostart = true;
-  } else {
-    tabAutostart = false;
-  }
+  tabAutostart = (localStorage.autostart == 'true');
 }
 
 var urls = [];
