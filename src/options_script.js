@@ -34,7 +34,11 @@ function save_options() {
 // Restores saved values from localStorage.
 function restore_options() {
   if (localStorage["autostart"]) {
-    document.getElementById("autostart").checked = localStorage["autostart"];
+    if (localStorage["autostart"] == 'true') {
+      document.getElementById("autostart").checked = true;
+    } else {
+      document.getElementById("autostart").checked = false;
+    }
   } else {
     document.getElementById("autostart").checked = false;
   }
@@ -126,7 +130,7 @@ function saveUrlsAndIntervals() {
 
   var urlsAndInterals = "";
 
-  for (var i = 0; i < line.length; i++) {
+  for (i = 0; i < line.length; i++) {
     urlsAndInterals = urlsAndInterals + line[i] + "\n";
   }
   document.getElementById('urls').value = urlsAndInterals;
