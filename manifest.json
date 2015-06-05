@@ -1,17 +1,23 @@
 {
-   "manifest_version": 2,
-   "background": { "page": "bg.html" },
-   "browser_action": {
-      "default_icon": "img/Magic-Wand-32.png",
-      "default_title": "Tabulus Rotatum - Rotate through list of URLs by loading new tabs and closing the previous."
-   },
-   "description": "Automatically rotate through list of URLs with correlating time intervals. Ideal for low CPU dashboards and kiosks. By Cami Greenall",
-   "icons": {
-      "128": "img/Magic-Wand-128.png",
-      "48": "img/Magic-Wand-48.png"
-   },
-   "name": "Tabulus Rotatum",
-   "options_page": "options.html",
-   "permissions": [ "tabs", "idle", "*://*/*" ],
-   "version": "2.0"
+  "manifest_version": 2,
+  "background": {
+    "page": "bg.html"
+  },
+  "browser_action": {
+    "default_icon": "img/Magic-Wand-32.png",
+    "default_title": "Tabulus Rotatum - Rotate through list of URLs by loading new tabs and closing the previous."
+  },
+  "description": "Automatically rotate through list of URLs with correlating time intervals. Ideal for low CPU dashboards and kiosks. By Cami Greenall",
+  "icons": {
+    "128": "img/Magic-Wand-128.png",
+    "48": "img/Magic-Wand-48.png"
+  },
+  "name": "Tabulus Rotatum",
+  "options_page": "options.html",
+  "permissions": [
+    "tabs",
+    "idle",
+    "*://*/*"
+  ],
+  "version": "2.0"
 }
