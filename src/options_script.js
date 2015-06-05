@@ -34,11 +34,7 @@ function save_options() {
 // Restores saved values from localStorage.
 function restore_options() {
   if (localStorage["autostart"]) {
-    if (localStorage["autostart"] == 'true') {
-      document.getElementById("autostart").checked = true;
-    } else {
-      document.getElementById("autostart").checked = false;
-    }
+    document.getElementById("autostart").checked = localStorage["autostart"];
   } else {
     document.getElementById("autostart").checked = false;
   }
@@ -57,7 +53,7 @@ function restore_options() {
         urlsLoad = JSON.parse(localStorage["urls"]);
         urlsIntervalsLoad = JSON.parse(localStorage["urlsIntervals"]);
         var urlsString = '';
-        for (i = 0; i < urlsLoad.length; i++) {
+        for (var i = 0; i < urlsLoad.length; i++) {
           urlsString += urlsIntervalsLoad[i] + ";" + urlsLoad[i] + "\n";
         }
         document.getElementById("urls").value = urlsString;
@@ -98,7 +94,7 @@ function saveUrlsAndIntervals() {
   bg.urlsIntervals = [];
   var badLine = [];
 
-  for (i = 0; i < line.length; i++) {
+  for (var i = 0; i < line.length; i++) {
     if (line[i] != "") {
       if (line[i].indexOf(";") < 0) {
         badLine.push(i);
@@ -130,7 +126,7 @@ function saveUrlsAndIntervals() {
 
   var urlsAndInterals = "";
 
-  for (i = 0; i < line.length; i++) {
+  for (var i = 0; i < line.length; i++) {
     urlsAndInterals = urlsAndInterals + line[i] + "\n";
   }
   document.getElementById('urls').value = urlsAndInterals;
