@@ -1,41 +1,112 @@
 <html>
 <head><title>Options :: Tabulus Rotatum</title></head>
 <style type="text/css">
-	body {font-family: arial, sans-serif;margin:2em;background-color:#f1f1f1;}
-	div#topline {background-image:url('../img/Magic-Wand-48.png');background-repeat: no-repeat;padding:5 5px 5px 55px;}
-	h1 {margin:0;padding:0;letter-spacing:-2px;}
-	span.byline {font-size:.7em;color:#999;}
-	span.byline a {color:#777;}
-	input {font-size:.8em;border:1px solid #ccc;padding:3px;}
-	label {font-size:.9em;}
-	span.example {font-size:.8em;color:#999;display:block;}
-	div#settings {margin:0 2em;background-color: #ffffff;border: 1px solid #ccc;border-radius: 10px 10px;padding: 10px 30px 30px 30px;}
-	div#settings p {border-bottom: 1px dotted #ccc;padding-bottom:18px;}
-	span#status, span#status2 {color:#ff6103;padding:0 1em;font-weight:bold;font-size:10px;}
-	div.saveheader {margin:.5em 2em .5em 0;text-align:right;}
-	p.thanks {font-size:.8em;margin:2em 0;}
+    body {
+        font-family: arial, sans-serif;
+        margin: 2em;
+        background-color: #f1f1f1;
+    }
+
+    div#topline {
+        background-image: url('/img/Magic-Wand-48.png');
+        background-repeat: no-repeat;
+        padding: 5px 5px 5px 55px;
+    }
+
+    h1 {
+        margin: 0;
+        padding: 0;
+        letter-spacing: -2px;
+    }
+
+    span.byline {
+        font-size: .7em;
+        color: #999;
+    }
+
+    span.byline a {
+        color: #777;
+    }
+
+    input {
+        font-size: .8em;
+        border: 1px solid #ccc;
+        padding: 3px;
+    }
+
+    label {
+        font-size: .9em;
+    }
+
+    span.example {
+        font-size: .8em;
+        color: #999;
+        display: block;
+    }
+
+    div#settings {
+        margin: 0 2em;
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        border-radius: 10px 10px;
+        padding: 10px 30px 30px 30px;
+    }
+
+    div#settings p {
+        border-bottom: 1px dotted #ccc;
+        padding-bottom: 18px;
+    }
+
+    span#status, span#status2 {
+        color: #ff6103;
+        padding: 0 1em;
+        font-weight: bold;
+        font-size: 10px;
+    }
+
+    div.saveheader {
+        margin: .5em 2em .5em 0;
+        text-align: right;
+    }
+
+    p.thanks {
+        font-size: .8em;
+        margin: 2em 0;
+    }
 </style>
 <body>
-	<div id="topline">
-		<h1>Tabulus Rotatum</h1>
-		<span class="byline">by <a>Cami Greenall</a> Twitter: <a href="http://twitter.com/camigreenall">@camigreenall</a></span>
-		<div class="saveheader"><span id="status"></span><button id="savetop">Save</button></div>
-	</div>
-	<div id="settings">
-		<p><label for="autostart">Auto Start:</label> <input type="checkbox" name="autostart" id="autostart"><span class="example">Automatically start Tabulus Rotatum on browser startup.</span></p>
-		<p>
-			<label for="autoloadurls">Auto Load URLs from URL:</label> <input type="checkbox" name="autoloadurls" id="autoloadurls"><span class="example">Automatically load URLs from a text file hosted in a URL on the web.</span>
+<div id="topline">
+    <h1>Tabulus Rotatum</h1>
+    <span class="byline">by <a>Cami Greenall</a> Twitter: <a
+            href="http://twitter.com/camigreenall">@camigreenall</a></span>
+
+    <div class="saveheader"><span id="status"></span>
+        <button id="savetop">Save</button>
+    </div>
+</div>
+<div id="settings">
+    <p><label for="autostart">Auto Start:</label> <input type="checkbox" name="autostart" id="autostart"><span
+            class="example">Automatically start Tabulus Rotatum on browser startup.</span></p>
+
+    <p>
+        <label for="autoloadurls">Auto Load URLs from URL:</label> <input type="checkbox" name="autoloadurls"
+                                                                          id="autoloadurls"><span class="example">Automatically load URLs from a text file hosted in a URL on the web.</span>
 			<span id="loadoptions">
 				<br>
-				<label for="loadurl">URL: </label><textarea name="loadurl" id="loadurl" rows="1" cols="80"></textarea><span class="example">The URL to load the list of URLs from. Must include the http or https prefix.</span>
+				<label for="loadurl">URL: </label><textarea name="loadurl" id="loadurl" rows="1"
+                                                            cols="80"></textarea><span class="example">The URL to load the list of URLs from. Must include the http or https prefix.</span>
 				<br>
 				<button id="load">Load URLs</button>
 			</span>
-		</p>
-		<p><label for="urls">URLS: </label> <textarea name="urls" id="urls" rows="10" cols="80"></textarea><span class="example">The list must be formatted with the time in seconds follwed by a semicolon (;) followed directly by the URL. Each new time and URL must be on a new line.<br>Example:<br>15;http://www.google.com<br>10;http://www.gmail.com<br></span></p>
-		<button id="save">Save</button><span id="status2"></span>
-	</div>
-	<p class="thanks">Special thanks for Ben Hedrington's <a href="https://code.google.com/p/revolver-chrome-extensions/">open source code</a> that this extension is based off of.
+    </p>
+    <p><label for="urls">URLS: </label> <textarea name="urls" id="urls" rows="10" cols="80"></textarea><span
+            class="example">The list must be formatted with the time in seconds follwed by a semicolon (;) followed directly by the URL. Each new time and URL must be on a new line.<br>Example:<br>15;http://www.google.com<br>10;http://www.gmail.com<br></span>
+    </p>
+    <button id="save">Save</button>
+    <span id="status2"></span>
+</div>
+<p class="thanks">Special thanks for Ben Hedrington's <a href="https://code.google.com/p/revolver-chrome-extensions/">open
+    source code</a> that this extension is based off of.
 </body>
 <script src="src/options_script.js"></script>
 </html>
