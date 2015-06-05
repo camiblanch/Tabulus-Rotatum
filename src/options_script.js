@@ -2,21 +2,21 @@ var bg = chrome.extension.getBackgroundPage();
 // Saves options to localStorage.
 function save_options() {
   if (document.getElementById("autostart").checked == true) {
-    localStorage["autostart"] = 'true';
+    localStorage.autostart = 'true';
     bg.tabInactive = true;
   } else {
-    localStorage["autostart"] = 'false';
+    localStorage.autostart = 'false';
     bg.tabInactive = false;
   }
 
-  localStorage["loadurl"] = document.getElementById("loadurl").value;
+  localStorage.loadurl = document.getElementById("loadurl").value;
 
   if (document.getElementById("autoloadurls").checked == true) {
-    localStorage["autoloadurls"] = 'true';
-    localStorage["loadurl"] = document.getElementById("loadurl").value;
+    localStorage.autoloadurls = 'true';
+    localStorage.loadurl = document.getElementById("loadurl").value;
     load_urls();
   } else {
-    localStorage["autoloadurls"] = 'false';
+    localStorage.autoloadurls = 'false';
     saveUrlsAndIntervals();
   }
 
@@ -33,8 +33,8 @@ function save_options() {
 
 // Restores saved values from localStorage.
 function restore_options() {
-  if (localStorage["autostart"]) {
-    if (localStorage["autostart"] == 'true') {
+  if (localStorage.autostart) {
+    if (localStorage.autostart == 'true') {
       document.getElementById("autostart").checked = true;
     } else {
       document.getElementById("autostart").checked = false;
@@ -42,20 +42,20 @@ function restore_options() {
   } else {
     document.getElementById("autostart").checked = false;
   }
-  if (localStorage["loadurl"]) {
-    document.getElementById("loadurl").value = localStorage["loadurl"];
+  if (localStorage.loadurl) {
+    document.getElementById("loadurl").value = localStorage.loadurl;
   }
-  if (localStorage["autoloadurls"]) {
-    if (localStorage["autoloadurls"] == 'true') {
+  if (localStorage.autoloadurls) {
+    if (localStorage.autoloadurls == 'true') {
       document.getElementById("autoloadurls").checked = true;
       load_urls();
     } else {
       document.getElementById("autoloadurls").checked = false;
       var urlsLoad;
       var urlsIntervalsLoad;
-      if (localStorage["urls"] && localStorage["urlsIntervals"]) {
-        urlsLoad = JSON.parse(localStorage["urls"]);
-        urlsIntervalsLoad = JSON.parse(localStorage["urlsIntervals"]);
+      if (localStorage.urls && localStorage.urlsIntervals) {
+        urlsLoad = JSON.parse(localStorage.urls);
+        urlsIntervalsLoad = JSON.parse(localStorage.urlsIntervals);
         var urlsString = '';
         for (var i = 0; i < urlsLoad.length; i++) {
           urlsString += urlsIntervalsLoad[i] + ";" + urlsLoad[i] + "\n";
@@ -78,7 +78,7 @@ function load_urls() {
   if (url !== "") {
     xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState == 4) {
-        localStorage["loadurl"] = document.getElementById("loadurl").value;
+        localStorage.loadurl = document.getElementById("loadurl").value;
         document.getElementById("urls").value = xmlhttp.responseText;
         saveUrlsAndIntervals();
       }
@@ -134,8 +134,8 @@ function saveUrlsAndIntervals() {
     urlsAndInterals = urlsAndInterals + line[i] + "\n";
   }
   document.getElementById('urls').value = urlsAndInterals;
-  localStorage['urls'] = JSON.stringify(urlsArray);
-  localStorage['urlsIntervals'] = JSON.stringify(urlsIntervalsArray);
+  localStorage.urls = JSON.stringify(urlsArray);
+  localStorage.urlsIntervals = JSON.stringify(urlsIntervalsArray);
 }
 
 // Adding listeners for restoring and saving options

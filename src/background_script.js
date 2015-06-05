@@ -7,8 +7,8 @@ var newTabId = -1;
 var moverInterval;
 
 var tabAutostart = false;
-if (localStorage["autostart"]) {
-  if (localStorage["autostart"] == 'true') {
+if (localStorage.autostart) {
+  if (localStorage.autostart == 'true') {
     tabAutostart = true;
   } else {
     tabAutostart = false;
@@ -16,12 +16,12 @@ if (localStorage["autostart"]) {
 }
 
 var urls = [];
-if (localStorage["urls"]) {
-  urls = JSON.parse(localStorage["urls"]);
+if (localStorage.urls) {
+  urls = JSON.parse(localStorage.urls);
 }
 var urlsIntervals = [];
-if (localStorage["urlsIntervals"]) {
-  urlsIntervals = JSON.parse(localStorage["urlsIntervals"]);
+if (localStorage.urlsIntervals) {
+  urlsIntervals = JSON.parse(localStorage.urlsIntervals);
 }
 
 var urlsIndex = 0;
