@@ -1,8 +1,7 @@
 chrome.tabs.create({url: "options.html"});
 
 // Global Variables - When possible pulling form Local Storage set via Options page.
-var activeWindows = new Array();
-var timeDelay = 10000;
+var activeWindows = [];
 var currWindowId = -1;
 var newTabId = -1;
 var moverInterval;
@@ -26,17 +25,13 @@ if (localStorage["urlsIntervals"]) {
 }
 
 var urlsIndex = 0;
-var currTabId = -1;
-var nextTabId = -1;
-
-function include(arr, obj) {
-  return (arr.indexOf(obj) != -1);
-}
 
 function activeInWindow(windowId) {
-  for (i in activeWindows) {
-    if (activeWindows[i] == windowId) {
-      return true;
+  for (var i in activeWindows) {
+    if (activeWindows.hasOwnProperty(i)) {
+      if (activeWindows[i] == windowId) {
+        return true;
+      }
     }
   }
 }
