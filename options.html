@@ -85,28 +85,36 @@
     </div>
 </div>
 <div id="settings">
-    <p><label for="autostart">Auto Start:</label> <input type="checkbox" name="autostart" id="autostart"><span
-            class="example">Automatically start Tabulus Rotatum on browser startup.</span></p>
+    <p>
+        <label for="autostart">Auto Start:</label>
+        <input type="checkbox" name="autostart" id="autostart">
+        <span class="example">Automatically start Tabulus Rotatum on browser startup.</span>
+    </p>
 
     <p>
-        <label for="autoloadurls">Auto Load URLs from URL:</label> <input type="checkbox" name="autoloadurls"
-                                                                          id="autoloadurls"><span class="example">Automatically load URLs from a text file hosted in a URL on the web.</span>
+        <label for="autoloadurls">Auto Load URLs from URL:</label>
+        <input type="checkbox" name="autoloadurls" id="autoloadurls">
+        <span class="example">Automatically load URLs from a text file hosted in a URL on the web.</span>
 			<span id="loadoptions">
 				<br>
-				<label for="loadurl">URL: </label><textarea name="loadurl" id="loadurl" rows="1"
-                                                            cols="80"></textarea><span class="example">The URL to load the list of URLs from. Must include the http or https prefix.</span>
+				<label for="loadurl">URL: </label>
+                <textarea name="loadurl" id="loadurl" rows="1" cols="80"></textarea>
+                <span class="example">The URL to load the list of URLs from. Must include the http or https prefix.</span>
 				<br>
 				<button id="load">Load URLs</button>
 			</span>
     </p>
-    <p><label for="urls">URLS: </label> <textarea name="urls" id="urls" rows="10" cols="80"></textarea><span
-            class="example">The list must be formatted with the time in seconds follwed by a semicolon (;) followed directly by the URL. Each new time and URL must be on a new line.<br>Example:<br>15;http://www.google.com<br>10;http://www.gmail.com<br></span>
+    <p>
+        <label for="urls">URLS: </label>
+        <textarea name="urls" id="urls" rows="10" cols="80"></textarea>
+        <span class="example">The list must be formatted with the time in seconds follwed by a semicolon (;) followed directly by the URL. Each new time and URL must be on a new line.<br>Example:<br>15;http://www.google.com<br>10;http://www.gmail.com<br></span>
     </p>
     <button id="save">Save</button>
     <span id="status2"></span>
 </div>
 <p class="thanks">Special thanks for Ben Hedrington's <a href="https://code.google.com/p/revolver-chrome-extensions/">open
     source code</a> that this extension is based off of.
+</p>
 </body>
 <script src="src/options.js"></script>
 </html>
