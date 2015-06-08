@@ -10,6 +10,10 @@ var tabAutostart = false;
 if (localStorage.autostart) {
   tabAutostart = (localStorage.autostart == 'true');
 }
+var waitNotIdle = false;
+if(localStorage.waitnotidle) {
+  tabWaitNotIdle = (localStorage.waitnotidle == 'true');
+}
 
 var urls = [];
 if (localStorage.urls) {

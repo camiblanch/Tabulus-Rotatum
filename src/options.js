@@ -3,10 +3,18 @@ var bg = chrome.extension.getBackgroundPage();
 function save_options() {
   if (document.getElementById("autostart").checked == true) {
     localStorage.autostart = 'true';
-    bg.tabInactive = true;
+    bg.tabAutostart = true;
   } else {
     localStorage.autostart = 'false';
-    bg.tabInactive = false;
+    bg.tabAutostart = false;
+  }
+
+  if(document.getElementById("waitnotidle").checked == true) {
+    localStorage.waitnotidle = 'true';
+    bg.waitNotIdle = true;
+  } else {
+    localStorage.waitnotidle = 'false';
+    bg.waitNotIdle = false;
   }
 
   localStorage.loadurl = document.getElementById("loadurl").value;
@@ -37,6 +45,11 @@ function restore_options() {
     document.getElementById("autostart").checked = (localStorage.autostart == 'true');
   } else {
     document.getElementById("autostart").checked = false;
+  }
+  if(localStorage.waitnotidle) {
+    document.getElementById("waitnotidle").checked = (localStorage.waitnotidle == 'true');
+  } else {
+    document.getElementById("waitnotidle").checked = false;
   }
   if (localStorage.loadurl) {
     document.getElementById("loadurl").value = localStorage.loadurl;
