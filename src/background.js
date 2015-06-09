@@ -5,6 +5,8 @@ var activeWindows = [];
 var currWindowId = -1;
 var newTabId = -1;
 var moverInterval;
+var pauseInterval = [];
+var paused = false;
 
 var tabAutostart = false;
 if (localStorage.autostart) {
@@ -45,33 +47,31 @@ chrome.browserAction.onClicked.addListener(function (tab) {
   var windowId = tab.windowId;
   currWindowId = tab.windowId;
   if (activeInWindow(windowId)) {
-    stop(windowId);
+    stop(currWindowId);
   } else {
-    go(windowId);
+    go(currWindowId);
   }
 });
 
-function badgeTabs(windowId, text) {
-  chrome.tabs.getAllInWindow(windowId, function (tabs) {
-    for (i in tabs) {
-      switch (text) {
-        case 'on':
-          chrome.browserAction.setBadgeText({text: "\u2022"});
-          chrome.browserAction.setBadgeBackgroundColor({color: [0, 255, 0, 100]});
-          break;
-        case '':
-          chrome.browserAction.setBadgeText({text: "\u00D7"});
-          chrome.browserAction.setBadgeBackgroundColor({color: [255, 0, 0, 100]});
-          break;
-        default:
-          chrome.browserAction.setBadgeText({text: ""});
-      }
-    }
-  });
+function badgeTabs(text) {
+  switch (text) {
+    case 'on':
+      chrome.browserAction.setBadgeText({text: "\u2022"});
+      chrome.browserAction.setBadgeBackgroundColor({color: [0, 255, 0, 100]});
+      break;
+    case '':
+      chrome.browserAction.setBadgeText({text: "\u00D7"});
+      chrome.browserAction.setBadgeBackgroundColor({color: [255, 0, 0, 100]});
+      break;
+    default:
+      chrome.browserAction.setBadgeText({text: ""});
+  }
 }
 
 // Start on a specific window
 function go(windowId) {
+  clearInterval(pauseInterval[0]);
+  pauseInterval.splice(0, 1);
   if (urls.length > 0) {
     chrome.tabs.query({
       'active': false,
@@ -82,8 +82,12 @@ function go(windowId) {
       }
     });
     chrome.tabs.onUpdated.addListener(startTimer);
-    activeWindows.push(windowId);
-    badgeTabs(windowId, 'on');
+    if (paused) {
+      paused = false;
+    } else {
+      activeWindows.push(windowId);
+    }
+    badgeTabs('on');
     moveTab();
   }
 }
@@ -103,26 +107,29 @@ function startTimer(tabId, changeInfo, tab) {
   }
 }
 
-function pause() {
-  console.log(moverInterval);
-  console.log("PAUSED");
-}
-
 // Stop on a specific window
-function stop(windowId) {
+function stop(windowId, seconds) {
   clearInterval(moverInterval);
-  console.log('Stopped.');
   chrome.tabs.onUpdated.removeListener(startTimer);
   var index = activeWindows.indexOf(windowId);
   if (index >= 0) {
-    activeWindows.splice(index);
-    badgeTabs(windowId, '');
+    badgeTabs('');
+    if (seconds) {
+      console.log("Pausing");
+      pauseInterval.push(
+        setInterval(function () {
+          go(windowId);
+        }, seconds * 1000));
+    } else {
+      activeWindows.splice(index);
+    }
   }
+
 }
 
 // Switches to next URL in list, loops.
 function moveTab() {
-  badgeTabs(currWindowId, 'on');
+  badgeTabs('on');
   chrome.tabs.create({
     url: urls[urlsIndex],
     selected: false
@@ -136,14 +143,16 @@ function moveTab() {
 
 // Deletes the current tab.
 function moveTab2() {
+  clearInterval(pauseInterval[0]);
+  pauseInterval.splice(0, 1);
   chrome.tabs.query({
     windowId: currWindowId
   }, function (tabs2) {
     chrome.tabs.remove(tabs2[0].id);
-
     moveTab();
   });
 }
+
 // Autostart function, procesed on initial startup.
 if (tabAutostart) {
   chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT},
@@ -154,13 +163,17 @@ if (tabAutostart) {
   );
 }
 
-chrome.runtime.onMessage.addListener(
-  function (request, sender, sendResponse) {
-    console.log(sender.tab ?
-    "from a content script:" + sender.tab.url :
-      "from the extension");
-    if (request.movement == "MOUSEMOVED") {
-      pause();
-      sendResponse({farewell: "goodbye"});
+if (waitTime > 0) {
+  chrome.runtime.onMessage.addListener(
+    function (request) {
+      if (request.movement == "MOUSEMOVED") {
+        if (moverInterval) {
+          clearInterval(pauseInterval);
+          pauseInterval.splice(0, 1);
+          paused = true;
+          stop(currWindowId, waitTime);
+        }
+      }
     }
-  });
+  );
+}
