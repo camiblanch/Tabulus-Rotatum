@@ -7,6 +7,17 @@
     "default_icon": "img/Magic-Wand-32.png",
     "default_title": "Tabulus Rotatum - Rotate through list of URLs by loading new tabs and closing the previous."
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*"
+      ],
+      "js": [
+        "src/dom.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
   "description": "Automatically rotate through list of URLs with correlating time intervals. Ideal for low CPU dashboards and kiosks. By Cami Greenall",
   "icons": {
     "128": "img/Magic-Wand-128.png",
