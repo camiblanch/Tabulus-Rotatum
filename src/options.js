@@ -9,13 +9,7 @@ function save_options() {
     bg.tabAutostart = false;
   }
 
-  if(document.getElementById("waitnotidle").checked == true) {
-    localStorage.waitnotidle = 'true';
-    bg.waitNotIdle = true;
-  } else {
-    localStorage.waitnotidle = 'false';
-    bg.waitNotIdle = false;
-  }
+  localStorage.waittime = document.getElementById("waittime").value;
 
   localStorage.loadurl = document.getElementById("loadurl").value;
 
@@ -46,10 +40,14 @@ function restore_options() {
   } else {
     document.getElementById("autostart").checked = false;
   }
-  if(localStorage.waitnotidle) {
-    document.getElementById("waitnotidle").checked = (localStorage.waitnotidle == 'true');
-  } else {
-    document.getElementById("waitnotidle").checked = false;
+  if(localStorage.waittime) {
+    dropDown = document.getElementById("waittime");
+    for (var i = 0; i < dropDown.options.length; i++) {
+      if (dropDown.options[i].text === localStorage.waittime) {
+        dropDown.selectedIndex = i;
+        break;
+      }
+    }
   }
   if (localStorage.loadurl) {
     document.getElementById("loadurl").value = localStorage.loadurl;

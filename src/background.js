@@ -10,9 +10,9 @@ var tabAutostart = false;
 if (localStorage.autostart) {
   tabAutostart = (localStorage.autostart == 'true');
 }
-var waitNotIdle = false;
-if(localStorage.waitnotidle) {
-  tabWaitNotIdle = (localStorage.waitnotidle == 'true');
+var waitTime = 0;
+if (localStorage.waittime) {
+  waitTime = localStorage.waittime;
 }
 
 var urls = [];
@@ -103,6 +103,11 @@ function startTimer(tabId, changeInfo, tab) {
   }
 }
 
+function pause() {
+  console.log(moverInterval);
+  console.log("PAUSED");
+}
+
 // Stop on a specific window
 function stop(windowId) {
   clearInterval(moverInterval);
@@ -135,6 +140,7 @@ function moveTab2() {
     windowId: currWindowId
   }, function (tabs2) {
     chrome.tabs.remove(tabs2[0].id);
+
     moveTab();
   });
 }
@@ -147,3 +153,14 @@ if (tabAutostart) {
     }
   );
 }
+
+chrome.runtime.onMessage.addListener(
+  function (request, sender, sendResponse) {
+    console.log(sender.tab ?
+    "from a content script:" + sender.tab.url :
+      "from the extension");
+    if (request.movement == "MOUSEMOVED") {
+      pause();
+      sendResponse({farewell: "goodbye"});
+    }
+  });

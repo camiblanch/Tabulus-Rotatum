@@ -93,24 +93,46 @@
         <label for="autostart">Auto Start:</label>
         <input type="checkbox" name="autostart" id="autostart">
         <span class="example">Automatically start Tabulus Rotatum on browser startup.</span>
-        <br>
-        <label for="waitnotidle">Wait When Not Idle:</label>
-        <input type="checkbox" name="waitnotidle" id="waitnotidle">
-        <span class="example">Pause rotation time when not idle.</span>
+    </p>
+
+    <p>
+        <label for="waittime">Time to Pause: </label>
+        <select name="waittime" id="waittime">
+            <option>0</option>
+            <option>5</option>
+            <option>10</option>
+            <option>15</option>
+            <option>20</option>
+            <option>25</option>
+            <option>30</option>
+            <option>35</option>
+            <option>40</option>
+            <option>45</option>
+            <option>50</option>
+            <option>60</option>
+            <option>90</option>
+            <option>120</option>
+            <option>150</option>
+            <option>210</option>
+            <option>240</option>
+            <option>270</option>
+            <option>300</option>
+        </select>
+        <span class="example">Amount of time in seconds to pause rotation after user interacts with webpage. Set to 0 to disable pausing on interaction.</span>
     </p>
 
     <p>
         <label for="autoloadurls">Auto Load URLs from URL:</label>
         <input type="checkbox" name="autoloadurls" id="autoloadurls">
         <span class="example">Automatically load URLs from a text file hosted in a URL on the web.</span>
-			<span id="loadoptions">
-				<br>
-				<label for="loadurl">URL: </label>
-                <textarea name="loadurl" id="loadurl" rows="1" cols="80"></textarea>
-                <span class="example">The URL to load the list of URLs from. Must include the http or https prefix.</span>
-				<br>
-				<button id="load">Load URLs</button>
-			</span>
+        <span id="loadoptions">
+            <br>
+            <label for="loadurl">URL: </label>
+            <textarea name="loadurl" id="loadurl" rows="1" cols="80"></textarea>
+            <span class="example">The URL to load the list of URLs from. Must include the http or https prefix.</span>
+            <br>
+            <button id="load">Load URLs</button>
+        </span>
     </p>
 
     <p>
