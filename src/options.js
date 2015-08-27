@@ -1,6 +1,7 @@
 var bg = chrome.extension.getBackgroundPage();
 // Saves options to localStorage.
 function save_options() {
+  bg.firstPlay = true;
   if (document.getElementById("autostart").checked == true) {
     localStorage.autostart = 'true';
     bg.tabAutostart = true;
@@ -10,6 +11,7 @@ function save_options() {
   }
 
   localStorage.waittime = document.getElementById("waittime").value;
+  bg.waitTime = localStorage.waittime;
 
   localStorage.loadurl = document.getElementById("loadurl").value;
 
@@ -40,7 +42,7 @@ function restore_options() {
   } else {
     document.getElementById("autostart").checked = false;
   }
-  if(localStorage.waittime) {
+  if (localStorage.waittime) {
     dropDown = document.getElementById("waittime");
     for (var i = 0; i < dropDown.options.length; i++) {
       if (dropDown.options[i].text === localStorage.waittime) {

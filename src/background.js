@@ -7,6 +7,8 @@ var newTabId = -1;
 var moverInterval;
 var pauseInterval = [];
 var paused = false;
+var firstPause = true;
+var firstPlay = true;
 
 var tabAutostart = false;
 if (localStorage.autostart) {
@@ -38,6 +40,17 @@ function activeInWindow(windowId) {
   }
 }
 
+function mouseMovedListener(request) {
+  if (request.movement == "MOUSEMOVED") {
+    if (moverInterval) {
+      clearInterval(pauseInterval[0]);
+      pauseInterval.splice(0, 1);
+      paused = true;
+      stop(currWindowId, waitTime);
+    }
+  }
+}
+
 // Setup Initial Badge Text
 var badgeColor = [139, 137, 137, 137];
 chrome.browserAction.setBadgeBackgroundColor({color: badgeColor});
@@ -47,6 +60,10 @@ chrome.browserAction.onClicked.addListener(function (tab) {
   var windowId = tab.windowId;
   currWindowId = tab.windowId;
   if (activeInWindow(windowId)) {
+    paused = false;
+    clearInterval(pauseInterval[0]);
+    pauseInterval.splice(0, 1);
+    chrome.runtime.onMessage.removeListener(mouseMovedListener);
     stop(currWindowId);
   } else {
     go(currWindowId);
@@ -58,10 +75,28 @@ function badgeTabs(text) {
     case 'on':
       chrome.browserAction.setBadgeText({text: "\u2022"});
       chrome.browserAction.setBadgeBackgroundColor({color: [0, 255, 0, 100]});
+      if (firstPlay) {
+        firstPlay = false;
+        if (waitTime > 0) {
+          chrome.runtime.onMessage.addListener(mouseMovedListener);
+        } else {
+          chrome.runtime.onMessage.removeListener(mouseMovedListener);
+        }
+      }
+      firstPause = true;
       break;
     case '':
       chrome.browserAction.setBadgeText({text: "\u00D7"});
       chrome.browserAction.setBadgeBackgroundColor({color: [255, 0, 0, 100]});
+      if (firstPause) {
+        // Set the urlsIndex back so we don't skip over a url when we hit start
+        if (urlsIndex > 0) {
+          urlsIndex--;
+        } else {
+          urlsIndex = urls.length - 1;
+        }
+        firstPause = false;
+      }
       break;
     default:
       chrome.browserAction.setBadgeText({text: ""});
@@ -159,21 +194,6 @@ if (tabAutostart) {
     function (tabs) {
       //Start in main window.
       go(tabs[0].windowId);
-    }
-  );
-}
-
-if (waitTime > 0) {
-  chrome.runtime.onMessage.addListener(
-    function (request) {
-      if (request.movement == "MOUSEMOVED") {
-        if (moverInterval) {
-          clearInterval(pauseInterval);
-          pauseInterval.splice(0, 1);
-          paused = true;
-          stop(currWindowId, waitTime);
-        }
-      }
     }
   );
 }
