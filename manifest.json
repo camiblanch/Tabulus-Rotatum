@@ -18,7 +18,7 @@
       "run_at": "document_end"
     }
   ],
-  "description": "Automatically rotate through list of URLs with correlating time intervals. Ideal for low CPU dashboards and kiosks. By Cami Greenall",
+  "description": "Automatically rotate through list of URLs with correlating time intervals. Ideal for low CPU dashboards and kiosks. By Cami Blanch",
   "icons": {
     "128": "img/Magic-Wand-128.png",
     "48": "img/Magic-Wand-48.png"
