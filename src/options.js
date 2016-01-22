@@ -24,6 +24,14 @@ function save_options() {
     saveUrlsAndIntervals();
   }
 
+  if (document.getElementById("showoptions").checked == true) {
+    localStorage.showoptions = 'true';
+    bg.tabAutostart = true;
+  } else {
+    localStorage.showoptions = 'false';
+    bg.tabAutostart = false;
+  }
+
   // Update status to let user know options were saved.
   var status = document.getElementById("status");
   var status2 = document.getElementById("status2");
@@ -77,6 +85,11 @@ function restore_options() {
     }
   } else {
     document.getElementById("autoloadurls").checked = false;
+  }
+  if (localStorage.showoptions) {
+    document.getElementById("showoptions").checked = (localStorage.showoptions == 'true');
+  } else {
+    document.getElementById("autostart").checked = false;
   }
 }
 

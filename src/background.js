@@ -1,4 +1,6 @@
-chrome.tabs.create({url: "options.html"});
+if (localStorage.showoptions == 'true') {
+  chrome.tabs.create({url: "options.html"});
+}
 
 // Global Variables - When possible pulling form Local Storage set via Options page.
 var activeWindows = [];
