@@ -89,7 +89,8 @@ function restore_options() {
   if (localStorage.showoptions) {
     document.getElementById("showoptions").checked = (localStorage.showoptions == 'true');
   } else {
-    document.getElementById("autostart").checked = false;
+    document.getElementById("showoptions").checked = true;
+    localStorage.showoptions = 'true';
   }
 }
 

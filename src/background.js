@@ -1,4 +1,4 @@
-if (localStorage.showoptions == 'true') {
+if (localStorage.showoptions == 'true' || localStorage.showoptions === undefined) {
   chrome.tabs.create({url: "options.html"});
 }
 
