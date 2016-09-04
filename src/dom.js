@@ -3,5 +3,5 @@ var i = 0;
 document.onmousemove = function () {
   chrome.runtime.sendMessage({movement: "MOUSEMOVED"});
 
-  console.log(++i);
+  // console.log(++i);
 };
