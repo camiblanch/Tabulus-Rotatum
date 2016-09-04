@@ -12,6 +12,7 @@ var paused = false;
 var firstPause = true;
 var firstPlay = true;
 
+// Bug? Looks like the values here are cached on .js file load and keep stale until browser restart
 var tabAutostart = false;
 if (localStorage.autostart) {
   tabAutostart = (localStorage.autostart == 'true');
@@ -20,7 +21,6 @@ var waitTime = 0;
 if (localStorage.waittime) {
   waitTime = localStorage.waittime;
 }
-
 var urls = [];
 if (localStorage.urls) {
   urls = JSON.parse(localStorage.urls);
@@ -28,6 +28,9 @@ if (localStorage.urls) {
 var urlsIntervals = [];
 if (localStorage.urlsIntervals) {
   urlsIntervals = JSON.parse(localStorage.urlsIntervals);
+}
+if (localStorage.autoloadurls) {
+  reload_urls();
 }
 
 var urlsIndex = 0;
@@ -105,6 +108,22 @@ function badgeTabs(text) {
   }
 }
 
+// Loads the URLs and intervals from text loaded from a URL
+function reload_urls() {
+  console.log("URL LIST: reloading");
+  var xmlhttp = new XMLHttpRequest();
+  var url = localStorage.loadurl;
+  if (url !== "") {
+    xmlhttp.onreadystatechange = function () {
+      if (xmlhttp.readyState == 4) {
+        saveUrlsAndIntervalsFromString(xmlhttp.responseText);
+      }
+    };
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send(null);
+  }
+}
+
 // Start on a specific window
 function go(windowId) {
   clearInterval(pauseInterval[0]);
@@ -172,8 +191,16 @@ function moveTab() {
     selected: false
   });
   urlsIndex++;
+  var refreshList = localStorage.refreshList; // load it here and not at the beginning of file
+  // to get current value
+  if (refreshList == "afterEachTab") {
+    reload_urls();
+  }
   if (urlsIndex == urls.length) {
     urlsIndex = 0;
+    if (refreshList == "afterTabCycle") {
+      reload_urls();
+    }
   }
   clearInterval(moverInterval);
 }

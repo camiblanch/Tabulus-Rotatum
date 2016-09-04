@@ -123,6 +123,14 @@
     <p>
         <label for="autoloadurls">Auto Load URLs from URL:</label>
         <input type="checkbox" name="autoloadurls" id="autoloadurls">
+
+        <label for="refreshList">Reload</label>
+        <select name="refreshList" id="refreshList">
+            <option value="">only on browser start</option>
+            <option value="afterTabCycle">after each tab cycle</option>
+            <option value="afterEachTab">after each tab switch</option>
+        </select>
+
         <span class="example">Automatically load URLs from a text file hosted in a URL on the web.</span>
         <span id="loadoptions">
             <br>

@@ -11,6 +11,7 @@ function save_options() {
   }
 
   localStorage.waittime = document.getElementById("waittime").value;
+  localStorage.refreshList = document.getElementById("refreshList").value;
   bg.waitTime = localStorage.waittime;
 
   localStorage.loadurl = document.getElementById("loadurl").value;
@@ -59,6 +60,16 @@ function restore_options() {
       }
     }
   }
+  if (localStorage.refreshList) {
+    dropDown = document.getElementById("refreshList");
+    for (var i = 0; i < dropDown.options.length; i++) {
+      if (dropDown.options[i].value === localStorage.refreshList) {
+        dropDown.selectedIndex = i;
+        break;
+      }
+    }
+  }
+
   if (localStorage.loadurl) {
     document.getElementById("loadurl").value = localStorage.loadurl;
   }
