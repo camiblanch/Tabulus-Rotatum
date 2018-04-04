@@ -11,6 +11,7 @@ function save_options() {
   }
 
   localStorage.waittime = document.getElementById("waittime").value;
+  localStorage.refreshList = document.getElementById("refreshList").value;
   bg.waitTime = localStorage.waittime;
 
   localStorage.loadurl = document.getElementById("loadurl").value;
@@ -59,6 +60,16 @@ function restore_options() {
       }
     }
   }
+  if (localStorage.refreshList) {
+    dropDown = document.getElementById("refreshList");
+    for (var i = 0; i < dropDown.options.length; i++) {
+      if (dropDown.options[i].value === localStorage.refreshList) {
+        dropDown.selectedIndex = i;
+        break;
+      }
+    }
+  }
+
   if (localStorage.loadurl) {
     document.getElementById("loadurl").value = localStorage.loadurl;
   }
@@ -113,52 +124,8 @@ function load_urls() {
 }
 
 function saveUrlsAndIntervals() {
-  var line = document.getElementById('urls').value.split('\n');
-  var urlsArray = [];
-  var urlsIntervalsArray = [];
-
-  bg.urls = [];
-  bg.urlsIntervals = [];
-  var badLine = [];
-
-  for (var i = 0; i < line.length; i++) {
-    if (line[i] != "") {
-      if (line[i].indexOf(";") < 0) {
-        badLine.push(i);
-        console.log("Missing ;\nLine " + i + " ignored.");
-      } else {
-        var urlAndIndex = line[i].split(';');
-        if (urlAndIndex.length > 2) {
-          badLine.push(i);
-          console.log("Too many ';'\nLine " + i + " ignored");
-        } else if (urlAndIndex[0] == "" && urlAndIndex[1] == "") {
-          badLine.push(i);
-          console.log("Missing url and/or time interval.\nLine " + i + " ignored.");
-        } else if (isNaN(urlAndIndex[0])) {
-          badLine.push(i);
-          console.log("Time interval is not a number.\nLine " + i + " ignored.");
-        } else {
-          urlsArray.push(urlAndIndex[1]);
-          urlsIntervalsArray.push(urlAndIndex[0]);
-
-          bg.urls.push(urlAndIndex[1]);
-          bg.urlsIntervals.push(urlAndIndex[0]);
-        }
-      }
-    }
-  }
-  for (i = badLine.length - 1; i >= 0; i--) {
-    line.splice(badLine[i], 1);
-  }
-
-  var urlsAndInterals = "";
-
-  for (i = 0; i < line.length; i++) {
-    urlsAndInterals = urlsAndInterals + line[i] + "\n";
-  }
-  document.getElementById('urls').value = urlsAndInterals;
-  localStorage.urls = JSON.stringify(urlsArray);
-  localStorage.urlsIntervals = JSON.stringify(urlsIntervalsArray);
+  document.getElementById('urls').value =
+    saveUrlsAndIntervalsFromString(document.getElementById('urls').value);
 }
 
 // Adding listeners for restoring and saving options
