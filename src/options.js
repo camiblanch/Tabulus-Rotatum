@@ -1,107 +1,78 @@
-var bg = chrome.extension.getBackgroundPage();
-// Saves options to localStorage.
 function save_options() {
-  bg.firstPlay = true;
-  if (document.getElementById("autostart").checked == true) {
-    localStorage.autostart = 'true';
-    bg.tabAutostart = true;
-  } else {
-    localStorage.autostart = 'false';
-    bg.tabAutostart = false;
-  }
+  const options = {};
+  options.firstPlay = true;
+  options.autostart = document.getElementById("autostart").checked;
+  options.waitTime = parseInt(document.getElementById("waittime").value);
+  options.loadUrl = document.getElementById("loadurl").value;
 
-  localStorage.waittime = document.getElementById("waittime").value;
-  bg.waitTime = localStorage.waittime;
-
-  localStorage.loadurl = document.getElementById("loadurl").value;
-
-  if (document.getElementById("autoloadurls").checked == true) {
-    localStorage.autoloadurls = 'true';
-    localStorage.loadurl = document.getElementById("loadurl").value;
+  if (document.getElementById("autoloadurls").checked) {
+    options.autoloadurls = true;
     load_urls();
   } else {
-    localStorage.autoloadurls = 'false';
+    options.autoloadurls = false;
     saveUrlsAndIntervals();
   }
 
-  if (document.getElementById("showoptions").checked == true) {
-    localStorage.showoptions = 'true';
-    bg.tabAutostart = true;
-  } else {
-    localStorage.showoptions = 'false';
-    bg.tabAutostart = false;
-  }
+  options.showoptions = !!document.getElementById("showoptions").checked;
 
-  // Update status to let user know options were saved.
-  var status = document.getElementById("status");
-  var status2 = document.getElementById("status2");
-  status.innerHTML = "OPTIONS SAVED";
-  status2.innerHTML = "OPTIONS SAVED";
-  setTimeout(function () {
-    status.innerHTML = "";
-    status2.innerHTML = "";
-  }, 1000);
+  chrome.storage.local.set(options, () => {
+    // Update status to let user know options were saved.
+    const status = document.getElementById("status");
+    const status2 = document.getElementById("status2");
+    const savedText = "OPTIONS SAVED";
+    status.innerHTML = savedText;
+    status2.innerHTML = savedText;
+    setTimeout(() => {
+      status.innerHTML = "";
+      status2.innerHTML = "";
+    }, 1000);
+  });
 }
 
 // Restores saved values from localStorage.
 function restore_options() {
-  if (localStorage.autostart) {
-    document.getElementById("autostart").checked = (localStorage.autostart == 'true');
-  } else {
-    document.getElementById("autostart").checked = false;
-  }
-  if (localStorage.waittime) {
-    dropDown = document.getElementById("waittime");
-    for (var i = 0; i < dropDown.options.length; i++) {
-      if (dropDown.options[i].text === localStorage.waittime) {
-        dropDown.selectedIndex = i;
-        break;
-      }
-    }
-  }
-  if (localStorage.loadurl) {
-    document.getElementById("loadurl").value = localStorage.loadurl;
-  }
-  if (localStorage.autoloadurls) {
-    if (localStorage.autoloadurls == 'true') {
-      document.getElementById("autoloadurls").checked = true;
+  chrome.storage.local.get({
+    autostart: false,
+    waitTime: 0,
+    loadUrl: "",
+    autoloadurls: false,
+    urls: [],
+    urlsIntervals: [],
+    showoptions: true,
+  }, (options) => {
+    console.log("Options from localStorage: ", options);
+    document.getElementById("autostart").checked = options.autostart;
+    const waitTimeDropdown = document.getElementById("waittime");
+    waitTimeDropdown.selectedIndex = Array.from(waitTimeDropdown.options).findIndex((dropdownOption) => parseInt(dropdownOption.text) === options.waitTime);
+    document.getElementById("loadurl").value = options.loadUrl;
+    document.getElementById("autoloadurls").checked = options.autoloadurls;
+    document.getElementById("showoptions").checked = options.showoptions;
+
+    if (options.autoloadurls) {
       load_urls();
     } else {
-      document.getElementById("autoloadurls").checked = false;
-      var urlsLoad;
-      var urlsIntervalsLoad;
-      if (localStorage.urls && localStorage.urlsIntervals) {
-        urlsLoad = JSON.parse(localStorage.urls);
-        urlsIntervalsLoad = JSON.parse(localStorage.urlsIntervals);
-        var urlsString = '';
-        for (var i = 0; i < urlsLoad.length; i++) {
-          urlsString += urlsIntervalsLoad[i] + ";" + urlsLoad[i] + "\n";
-        }
+      if (options.urls.length && options.urlsIntervals.length) {
+        const urlsFromStorage = options.urls;
+        const urlsIntervalsFromStorage = options.urlsIntervals;
+        let urlsString = "";
+
+        urlsFromStorage.forEach((url, i) => {
+          urlsString += urlsIntervalsFromStorage[i] + ";" + url + "\n";
+        });
+
         document.getElementById("urls").value = urlsString;
-      } else {
-        document.getElementById("urls").value = "";
-        document.getElementById("urlsIntervals").value = "";
       }
     }
-  } else {
-    document.getElementById("autoloadurls").checked = false;
-  }
-  if (localStorage.showoptions) {
-    document.getElementById("showoptions").checked = (localStorage.showoptions == 'true');
-  } else {
-    document.getElementById("showoptions").checked = true;
-    localStorage.showoptions = 'true';
-  }
+  });
 }
 
 // Loads the URLs and intervals from text loaded from a URL
 function load_urls() {
-  var xmlhttp = new XMLHttpRequest();
-  var url = document.getElementById("loadurl").value;
-  if (url !== "") {
+  const xmlhttp = new XMLHttpRequest();
+  const url = document.getElementById("loadurl").value;
+  if (url.length) {
     xmlhttp.onreadystatechange = function () {
-      if (xmlhttp.readyState == 4) {
-        localStorage.loadurl = document.getElementById("loadurl").value;
+      if (xmlhttp.readyState === 4) {
         document.getElementById("urls").value = xmlhttp.responseText;
         saveUrlsAndIntervals();
       }
@@ -113,56 +84,46 @@ function load_urls() {
 }
 
 function saveUrlsAndIntervals() {
-  var line = document.getElementById('urls').value.split('\n');
-  var urlsArray = [];
-  var urlsIntervalsArray = [];
+  const urlLines = document.getElementById("urls").value.split("\n");
+  const urlsArray = [];
+  const urlsIntervalsArray = [];
 
-  bg.urls = [];
-  bg.urlsIntervals = [];
-  var badLine = [];
+  const badLines = [];
 
-  for (var i = 0; i < line.length; i++) {
-    if (line[i] != "") {
-      if (line[i].indexOf(";") < 0) {
-        badLine.push(i);
+  urlLines.forEach((urlLine, i) => {
+    if (urlLine.length) {
+      if (urlLine.indexOf(";") < 0) {
+        badLines.push(i);
         console.log("Missing ;\nLine " + i + " ignored.");
       } else {
-        var urlAndIndex = line[i].split(';');
+        const urlAndIndex = urlLine.split(";");
         if (urlAndIndex.length > 2) {
-          badLine.push(i);
+          badLines.push(i);
           console.log("Too many ';'\nLine " + i + " ignored");
-        } else if (urlAndIndex[0] == "" && urlAndIndex[1] == "") {
-          badLine.push(i);
+        } else if (urlAndIndex[0] === "" && urlAndIndex[1] === "") {
+          badLines.push(i);
           console.log("Missing url and/or time interval.\nLine " + i + " ignored.");
         } else if (isNaN(urlAndIndex[0])) {
-          badLine.push(i);
+          badLines.push(i);
           console.log("Time interval is not a number.\nLine " + i + " ignored.");
         } else {
           urlsArray.push(urlAndIndex[1]);
-          urlsIntervalsArray.push(urlAndIndex[0]);
-
-          bg.urls.push(urlAndIndex[1]);
-          bg.urlsIntervals.push(urlAndIndex[0]);
+          urlsIntervalsArray.push(parseInt(urlAndIndex[0]));
         }
       }
     }
-  }
-  for (i = badLine.length - 1; i >= 0; i--) {
-    line.splice(badLine[i], 1);
+  });
+
+  for (let i = badLines.length - 1; i >= 0; i--) {
+    urlLines.splice(badLines[i], 1);
   }
 
-  var urlsAndInterals = "";
-
-  for (i = 0; i < line.length; i++) {
-    urlsAndInterals = urlsAndInterals + line[i] + "\n";
-  }
-  document.getElementById('urls').value = urlsAndInterals;
-  localStorage.urls = JSON.stringify(urlsArray);
-  localStorage.urlsIntervals = JSON.stringify(urlsIntervalsArray);
+  document.getElementById("urls").value = urlLines.join("\n");
+  chrome.storage.local.set({urls: urlsArray, urlsIntervals: urlsIntervalsArray});
 }
 
 // Adding listeners for restoring and saving options
-document.getElementById('load').addEventListener('click', load_urls);
-document.addEventListener('DOMContentLoaded', restore_options);
-document.querySelector('#save').addEventListener('click', save_options);
-document.querySelector('#savetop').addEventListener('click', save_options);
+document.getElementById("load").addEventListener("click", load_urls);
+document.addEventListener("DOMContentLoaded", restore_options);
+document.querySelector("#save").addEventListener("click", save_options);
+document.querySelector("#savetop").addEventListener("click", save_options);
