@@ -27,8 +27,7 @@
   "options_page": "options.html",
   "permissions": [
     "storage",
-    "tabs",
-    "idle"
+    "tabs"
   ],
   "host_permissions": [
     "*://*/*"
