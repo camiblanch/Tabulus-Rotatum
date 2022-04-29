@@ -26,8 +26,7 @@
   "name": "Tabulus Rotatum",
   "options_page": "options.html",
   "permissions": [
-    "storage",
-    "tabs"
+    "storage"
   ],
   "host_permissions": [
     "*://*/*"
