@@ -40,7 +40,6 @@ function restore_options() {
     urlsIntervals: [],
     showoptions: true,
   }, (options) => {
-    console.log("Options from localStorage: ", options);
     document.getElementById("autostart").checked = options.autostart;
     const waitTimeDropdown = document.getElementById("waittime");
     waitTimeDropdown.selectedIndex = Array.from(waitTimeDropdown.options).findIndex((dropdownOption) => parseInt(dropdownOption.text) === options.waitTime);
