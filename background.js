@@ -132,6 +132,7 @@ async function badgeTabs(text) {
 // Start on a specific window
 async function go(windowId) {
   const pauseInterval = await readArray("pauseInterval");
+  const currWindowId = await readInteger("currWindowId", -1);
   clearInterval(pauseInterval.shift());
   await writeArray("pauseInterval", pauseInterval);
   const urls = await readArray("urls");
